@@ -1,6 +1,6 @@
 {
-  "name": "@curvefi/api",
-  "version": "2.66.10",
+  "name": "curve-api-fork-2",
+  "version": "3.0.0",
   "description": "JavaScript library for curve.fi",
   "main": "lib/index.js",
   "author": "Macket",
@@ -16,7 +16,8 @@
   "scripts": {
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "lint": "eslint src",
-    "tsc": "tsc -w"
+    "tsc": "tsc -w",
+    "publish": "npm run build && npm publish"
   },
   "type": "module",
   "devDependencies": {

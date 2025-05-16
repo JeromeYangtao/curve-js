@@ -438,6 +438,7 @@ export const _getUsdRate = async (assetId: string): Promise<number> => {
         56: "binance-smart-chain",
         100: 'xdai',
         137: 'polygon-pos',
+        146: 'sonic',
         196: 'x-layer',
         250: 'fantom',
         252: 'fraxtal',
@@ -458,9 +459,10 @@ export const _getUsdRate = async (assetId: string): Promise<number> => {
         56: 'binancecoin',
         100: 'xdai',
         137: 'matic-network',
+        146: 'sonic-3',
         196: 'okb',
         250: 'fantom',
-        252: 'frax-ether',
+        252: 'frax-share',
         324: 'ethereum',
         1284: 'moonbeam',
         2222: 'kava',
@@ -667,7 +669,7 @@ export const getTVL = async (chainId = curve.chainId): Promise<number> => {
 }
 
 export const getVolumeApiController = async (network: INetworkName): Promise<IVolumeAndAPYs> => {
-    if(curve.isLiteChain) {
+    if(curve.isLiteChain && curve.chainId !== 146) {
         throw Error('This method is not supported for the lite version')
     }
 
@@ -685,7 +687,7 @@ export const getVolumeApiController = async (network: INetworkName): Promise<IVo
 }
 
 export const getVolume = async (chainId = curve.chainId): Promise<{ totalVolume: number, cryptoVolume: number, cryptoShare: number }> => {
-    if(curve.isLiteChain) {
+    if(curve.isLiteChain && curve.chainId !== 146) {
         throw Error('This method is not supported for the lite version')
     }
 
@@ -694,12 +696,14 @@ export const getVolume = async (chainId = curve.chainId): Promise<{ totalVolume:
     return { totalVolume, cryptoVolume, cryptoShare }
 }
 
-export const _setContracts = (address: string, abi: any): void => {
-    curve.contracts[address] = {
+export const _setContracts = (address: string, abi: any) => {
+    const contracts = {
         abi,
         contract: new Contract(address, abi, curve.signer || curve.provider),
         multicallContract: new MulticallContract(address, abi),
     }
+    curve.contracts[address] = contracts;
+    return contracts;
 }
 
 // Find k for which x * k = target_x or y * k = target_y
